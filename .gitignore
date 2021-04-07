@@ -7,3 +7,4 @@
 /build/lib/djangotools/
 /build/lib/notifications_rest/django_notifications_rest.egg-info/
 /build/
+__pycache__
