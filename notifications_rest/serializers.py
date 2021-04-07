@@ -2,17 +2,21 @@ from rest_framework.serializers import ModelSerializer, RelatedField
 from rest_framework import serializers
 from notifications.models import Notification
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth import get_user_model
+from django.conf import settings
 
-UserModel = get_user_model()
+if hasattr(settings, 'REST_NOTIFICATION_SERIALIZER_CLASS'):
+    from pydoc import locate
+    UserSerializer = locate(settings.REST_NOTIFICATION_SERIALIZER_CLASS)
+else:
+    from django.contrib.auth import get_user_model
+    UserModel = get_user_model()
+    
+    class UserSerializer(ModelSerializer):
+        id = serializers.IntegerField()
 
-
-class UserSerializer(ModelSerializer):
-    id = serializers.IntegerField()
-
-    class Meta:
-        model = UserModel
-        fields = ['id', ]
+        class Meta:
+            model = UserModel
+            fields = ['id', ]
 
 
 class ContentTypeSerializer(ModelSerializer):
